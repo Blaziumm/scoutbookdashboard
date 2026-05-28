@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Scoutbook Plus - Advancements Snapshot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg-grid"></div>
+    <header class="hero">
+      <div class="hero__content">
+        <p class="eyebrow">Local Dashboard</p>
+        <h1>Advancements Snapshot</h1>
+        <p class="subtitle">
+          A local-only view of ranks, merit badges, and progress, powered by your
+          `debug-advancements.txt` export.
+        </p>
+      </div>
+      <div class="hero__stats" id="summary"></div>
+    </header>
+
+    <main class="layout">
+      <section class="panel" id="programs">
+        <div class="panel__header">
+          <div>
+            <h2>Rank Progress by Program</h2>
+            <p>Grouped by program with award status and completion percent.</p>
+          </div>
+          <div class="chip" id="person">Person ID: --</div>
+        </div>
+        <div class="panel__body" id="program-list"></div>
+      </section>
+
+      <section class="panel" id="merit-badges">
+        <div class="panel__header">
+          <div>
+            <h2>Merit Badges</h2>
+            <p>Filter by status and see categories at a glance.</p>
+          </div>
+          <div class="filters">
+            <button class="filter is-active" data-filter="all">All</button>
+            <button class="filter" data-filter="Awarded">Awarded</button>
+            <button class="filter" data-filter="Started">In Progress</button>
+          </div>
+        </div>
+        <div class="panel__body badge-grid" id="badge-grid"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>
+        Data source: local `debug-advancements.txt` file. Not affiliated with BSA.
+      </p>
+    </footer>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>

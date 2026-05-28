@@ -1,0 +1,20 @@
+{
+  "name": "advancements-automation",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local Playwright automation for advancements.scouting.org",
+  "main": "scripts/run.js",
+  "scripts": {
+    "login": "node scripts/login.js",
+    "read:advancements": "node scripts/run.js read:advancements",
+    "read:meritbadges": "node scripts/run.js read:meritbadges",
+    "read:events": "node scripts/run.js read:events",
+    "read:profile": "node scripts/run.js read:profile",
+    "probe": "node scripts/probe.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "playwright": "^1.48.0"
+  }
+}

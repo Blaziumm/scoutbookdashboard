@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Advancements Snapshot - Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg-grid"></div>
+    <main class="login">
+      <section class="login-card">
+        <p class="eyebrow">Local Access</p>
+        <h1>Sign in to Scoutbook Plus</h1>
+        <p class="subtitle">
+          Your credentials are used locally to create a session for the automation
+          script. They are not stored on the server.
+        </p>
+        <form id="login-form">
+          <label>
+            Username or Email
+            <input type="text" name="username" required autocomplete="username" />
+          </label>
+          <label>
+            Password
+            <input type="password" name="password" required autocomplete="current-password" />
+          </label>
+          <button type="submit">Login</button>
+          <p class="form-status" id="form-status"></p>
+        </form>
+      </section>
+    </main>
+    <script src="login.js" defer></script>
+  </body>
+</html>
