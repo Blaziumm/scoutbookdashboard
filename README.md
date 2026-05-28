@@ -1,7 +1,6 @@
 To Do:
 
 -See attendence RSVP by patrol and be able to mark people as RSVP on my end(not actually do it for them)
-
 -Save browser token in cookies so you don’t have to keep logging in
 -Get Event reading fully impl 
 -Get an API setup
