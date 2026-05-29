@@ -84,8 +84,10 @@ function runAdvancementsJob(callback) {
 
     const jsonStart = stdout.indexOf("{");
     if (jsonStart === -1) {
-      res.writeHead(500, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ error: "No JSON output from script" }));
+      const error = new Error("No JSON output from script");
+      error.details = stderr || stdout;
+      error.status = 500;
+      callback(error);
       return;
     }
 
