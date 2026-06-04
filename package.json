@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "description": "Playwright automation for advancements.scouting.org with Browserless support",
-  "main": "scripts/run.js",
   "scripts": {
     "login": "node scripts/login.js",
     "read:advancements": "node scripts/run.js read:advancements",

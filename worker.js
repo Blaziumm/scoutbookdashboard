@@ -39,7 +39,7 @@ app.post("/login", requireAuth, async (req, res) => {
   child.stdout.on("data", (c) => (stdout += c.toString()));
   child.stderr.on("data", (c) => (stderr += c.toString()));
 
-  child.on("close", (code) => {
+  child.on("close", async (code) => {
     if (code !== 0) {
       return res.status(500).json({ error: "Login failed", details: stderr || stdout });
     }
@@ -92,7 +92,7 @@ app.post("/advancements", requireAuth, async (req, res) => {
   child.stdout.on("data", (c) => (stdout += c.toString()));
   child.stderr.on("data", (c) => (stderr += c.toString()));
 
-  child.on("close", (code) => {
+  child.on("close", async (code) => {
     try {
       if (fs.existsSync(tmpPath)) fs.unlinkSync(tmpPath);
     } catch (e) {
