@@ -152,6 +152,19 @@ async function readAdvancements(context, page) {
     token
   );
 
+  let events = { monthLabel: null, timezone: null, events: [], subscriptions: [] };
+  try {
+    events = await readEvents(context, page);
+  } catch (error) {
+    events = {
+      monthLabel: null,
+      timezone: null,
+      events: [],
+      subscriptions: [],
+      error: error.message,
+    };
+  }
+
   return {
     personId,
     ranks,
@@ -159,6 +172,7 @@ async function readAdvancements(context, page) {
     awards,
     userActivitySummary,
     leadershipPositionHistory,
+    events,
   };
 }
 
@@ -183,10 +197,129 @@ async function readMeritBadges(context, page) {
   return { personId, meritBadges };
 }
 
-async function readEvents() {
-  throw new Error(
-    "Events endpoint not discovered yet. Run: npm run probe and click Events to capture the API URL."
-  );
+async function readEvents(context, page) {
+  await page.goto("https://advancements.scouting.org/calendar", { waitUntil: "networkidle" });
+  await page.waitForSelector(".rbc-month-view", { timeout: 15000 });
+
+  return page.evaluate(() => {
+    const cleanText = (value) => (value ? value.replace(/\s+/g, " ").trim() : null);
+
+    const monthLookup = {
+      Jan: 0,
+      Feb: 1,
+      Mar: 2,
+      Apr: 3,
+      May: 4,
+      Jun: 5,
+      Jul: 6,
+      Aug: 7,
+      Sep: 8,
+      Oct: 9,
+      Nov: 10,
+      Dec: 11,
+    };
+
+    const formatMonthDay = (monthIndex, day) => {
+      const monthName = new Intl.DateTimeFormat("en-US", { month: "short" }).format(
+        new Date(2026, monthIndex, 1)
+      );
+      return `${monthName} ${day}`;
+    };
+
+    const monthLabel = cleanText(document.querySelector(".rbc-toolbar-label")?.textContent);
+    const timezone = cleanText(
+      document.querySelector(".Calendar__tzNote___WU0zc span span")?.textContent ||
+        document.querySelector(".Calendar__tzNote___WU0zc span")?.textContent
+    );
+    const [monthToken, yearToken] = (monthLabel || "").split(/\s+/);
+    const currentMonthIndex = monthLookup[monthToken] ?? null;
+    const previousMonthIndex = currentMonthIndex === null ? null : (currentMonthIndex + 11) % 12;
+
+    const resolveDateDisplay = (cell, rowIndex) => {
+      if (!cell) {
+        return null;
+      }
+
+      const rawText = cleanText(cell.textContent);
+      if (!rawText) {
+        return null;
+      }
+
+      if (/^[A-Za-z]{3}\s+\d{1,2}$/.test(rawText)) {
+        return rawText;
+      }
+
+      const day = Number(rawText);
+      if (!Number.isFinite(day) || currentMonthIndex === null) {
+        return rawText;
+      }
+
+      if (cell.classList.contains("rbc-off-range") && rowIndex === 0 && day >= 20) {
+        return formatMonthDay(previousMonthIndex, day);
+      }
+
+      return formatMonthDay(currentMonthIndex, day);
+    };
+
+    const events = [];
+
+    document.querySelectorAll(".rbc-month-row").forEach((row, rowIndex) => {
+      const dateCells = Array.from(row.querySelectorAll(".rbc-date-cell"));
+      const segments = Array.from(row.querySelectorAll(".rbc-row-segment"));
+      const rowRect = row.getBoundingClientRect();
+
+      const dateCellOffsets = dateCells.map((cell) => {
+        const rect = cell.getBoundingClientRect();
+        return {
+          cell,
+          left: Math.round(rect.left - rowRect.left),
+        };
+      });
+
+      segments.forEach((segment, index) => {
+        const segmentRect = segment.getBoundingClientRect();
+        const segmentLeft = Math.round(segmentRect.left - rowRect.left);
+        const dateCell =
+          dateCellOffsets.find((entry) => entry.left === segmentLeft)?.cell || dateCells[index];
+        const dateDisplay = resolveDateDisplay(dateCell, rowIndex);
+        const cards = Array.from(segment.querySelectorAll("[class*='MonthEvent__event']"));
+
+        cards.forEach((card) => {
+          const title =
+            cleanText(card.querySelector("[title]")?.getAttribute("title")) ||
+            cleanText(card.querySelector("span:last-child")?.textContent) ||
+            cleanText(card.textContent);
+          const time = cleanText(card.querySelector("[class*='MonthEvent__time']")?.textContent);
+
+          if (!title) {
+            return;
+          }
+
+          events.push({
+            dateDisplay,
+            time,
+            title,
+            classes: cleanText(card.className),
+            style: card.getAttribute("style") || null,
+          });
+        });
+      });
+    });
+
+    const subscriptions = Array.from(document.querySelectorAll(".ant-list-items > .ant-list-item"))
+      .map((item) => {
+        const title = cleanText(item.textContent.replace(/Copy url/g, ""));
+        return title ? { title } : null;
+      })
+      .filter(Boolean);
+
+    return {
+      monthLabel,
+      timezone,
+      events,
+      subscriptions,
+    };
+  });
 }
 
 async function readProfile(context, page) {

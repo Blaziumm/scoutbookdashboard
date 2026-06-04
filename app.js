@@ -32,17 +32,30 @@ function summarizeBadges(badges) {
   return { total, awarded, started };
 }
 
+function summarizeEvents(eventsData) {
+  const events = eventsData?.events || [];
+  const subscriptions = eventsData?.subscriptions || [];
+  return {
+    total: events.length,
+    subscriptions: subscriptions.length,
+    monthLabel: eventsData?.monthLabel || "--",
+    timezone: eventsData?.timezone || "--",
+  };
+}
+
 function renderSummary(data) {
   const programs = (data.ranks?.program || []).filter(
     (program) => program.program !== "Sea Scouting"
   );
   const { totalRanks, awarded } = summarizeRanks(programs);
   const { total, awarded: awardedBadges, started } = summarizeBadges(data.meritBadges || []);
+  const { total: totalEvents } = summarizeEvents(data.events || {});
 
   const summary = document.getElementById("summary");
   summary.innerHTML = [
     `<div class="stat-card"><h3>Ranks Earned</h3><p>${awarded} of ${totalRanks}</p></div>`,
     `<div class="stat-card"><h3>Merit Badges</h3><p>${awardedBadges} awarded, ${started} in progress</p></div>`,
+    `<div class="stat-card"><h3>Calendar Events</h3><p>${totalEvents} visible this month</p></div>`,
     `<div class="stat-card"><h3>Last Refresh</h3><p>${new Date().toLocaleString()}</p></div>`,
   ].join("");
 
@@ -167,6 +180,58 @@ function renderBadges(data) {
   });
 }
 
+function renderEvents(data) {
+  const eventsData = data.events || {};
+  const events = eventsData.events || [];
+  const subscriptions = eventsData.subscriptions || [];
+  const eventGrid = document.getElementById("event-grid");
+  const subscriptionGrid = document.getElementById("subscription-grid");
+  const monthChip = document.getElementById("calendar-month");
+  const timezoneChip = document.getElementById("calendar-timezone");
+
+  if (monthChip) {
+    monthChip.textContent = `Month: ${eventsData.monthLabel || "--"}`;
+  }
+  if (timezoneChip) {
+    timezoneChip.textContent = `Timezone: ${eventsData.timezone || "--"}`;
+  }
+
+  if (!events.length) {
+    eventGrid.innerHTML = `<div class="empty-state">No calendar events found.</div>`;
+  } else {
+    eventGrid.innerHTML = events
+      .map((event) => {
+        const eventClass = event.classes?.includes("continuesPrior")
+          ? "event-card is-continues-prior"
+          : event.classes?.includes("continuesAfter")
+          ? "event-card is-continues-after"
+          : "event-card";
+        return `
+          <article class="${eventClass}">
+            <div class="event-card__date">${event.dateDisplay || "--"}</div>
+            <div class="event-card__body">
+              <h3>${event.title}</h3>
+              <p>${event.time || "All day"}</p>
+            </div>
+          </article>
+        `;
+      })
+      .join("");
+  }
+
+  if (!subscriptions.length) {
+    subscriptionGrid.innerHTML = `<div class="empty-state">No subscribed calendars found.</div>`;
+  } else {
+    subscriptionGrid.innerHTML = subscriptions
+      .map(
+        (subscription) => `
+          <div class="subscription-chip">${subscription.title}</div>
+        `
+      )
+      .join("");
+  }
+}
+
 async function init() {
   try {
     const data = await loadData();
@@ -175,6 +240,7 @@ async function init() {
     }
     renderSummary(data);
     renderPrograms(data);
+    renderEvents(data);
     renderBadges(data);
   } catch (error) {
     document.body.innerHTML = `<p style="padding:40px;">${error.message}</p>`;

@@ -75,6 +75,13 @@ h1 {
   gap: 16px;
 }
 
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
 .stat-card {
   background: var(--panel);
   border-radius: var(--radius);
@@ -137,6 +144,12 @@ h1 {
   font-size: 0.85rem;
 }
 
+.chip--ghost {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--muted);
+}
+
 .filters {
   display: flex;
   gap: 8px;
@@ -163,6 +176,98 @@ h1 {
   display: grid;
   gap: 20px;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.panel__body--stacked {
+  display: grid;
+  gap: 18px;
+}
+
+.event-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.event-card {
+  background: #fffdf7;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  padding: 16px 18px;
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+.event-card.is-continues-prior {
+  background: linear-gradient(180deg, #f6fff0 0%, #fffdf7 100%);
+}
+
+.event-card.is-continues-after {
+  background: linear-gradient(180deg, #f4f9ff 0%, #fffdf7 100%);
+}
+
+.event-card__date {
+  font-family: "Source Serif 4", "Times New Roman", serif;
+  font-size: 1.8rem;
+  line-height: 1;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.event-card__body h3 {
+  margin: 0 0 4px;
+  font-size: 1.05rem;
+}
+
+.event-card__body p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.subscription-panel {
+  background: #fffdf7;
+  border-radius: 18px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  display: grid;
+  gap: 14px;
+}
+
+.subscription-panel__header h3 {
+  margin: 0 0 4px;
+  font-size: 1.05rem;
+}
+
+.subscription-panel__header p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.subscription-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.subscription-chip {
+  background: var(--accent-soft);
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.empty-state {
+  padding: 18px;
+  border-radius: 16px;
+  border: 1px dashed var(--line);
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.55);
 }
 
 .program-card {
@@ -445,6 +550,18 @@ button[type="submit"] {
 
   .badge-grid {
     grid-template-columns: 1fr;
+  }
+
+  .chips {
+    justify-content: flex-start;
+  }
+
+  .event-card {
+    grid-template-columns: 1fr;
+  }
+
+  .event-card__date {
+    font-size: 1.5rem;
   }
 }
 

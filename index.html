@@ -16,11 +16,10 @@
     <div class="bg-grid"></div>
     <header class="hero">
       <div class="hero__content">
-        <p class="eyebrow">Local Dashboard</p>
+        <p class="eyebrow">Dashboard++</p>
         <h1>Advancements Snapshot</h1>
         <p class="subtitle">
-          A local-only view of ranks, merit badges, and progress, powered by your
-          `debug-advancements.txt` export.
+          A view of ranks, merit badges, and progress, powered by your export.
         </p>
       </div>
       <div class="hero__stats" id="summary"></div>
@@ -36,6 +35,29 @@
           <div class="chip" id="person">Person ID: --</div>
         </div>
         <div class="panel__body" id="program-list"></div>
+      </section>
+
+      <section class="panel" id="events">
+        <div class="panel__header">
+          <div>
+            <h2>Calendar Events</h2>
+            <p>Mirrors the current Scoutbook calendar month and its subscribed units.</p>
+          </div>
+          <div class="chips">
+            <div class="chip" id="calendar-month">Month: --</div>
+            <div class="chip chip--ghost" id="calendar-timezone">Timezone: --</div>
+          </div>
+        </div>
+        <div class="panel__body panel__body--stacked">
+          <div class="event-grid" id="event-grid"></div>
+          <div class="subscription-panel">
+            <div class="subscription-panel__header">
+              <h3>Subscribed Calendars</h3>
+              <p>Copy the .ics URLs from Scoutbook Plus to keep calendar apps in sync.</p>
+            </div>
+            <div class="subscription-grid" id="subscription-grid"></div>
+          </div>
+        </div>
       </section>
 
       <section class="panel" id="merit-badges">
@@ -56,7 +78,7 @@
 
     <footer class="footer">
       <p>
-        Data source: local `debug-advancements.txt` file. Not affiliated with BSA.
+        Data source: Scoutbook Plus advancements and calendar data. Not affiliated with BSA.
       </p>
     </footer>
 
