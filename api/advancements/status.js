@@ -7,6 +7,8 @@ module.exports = async (req, res) => {
     return;
   }
 
+  await cache.ensureLoaded();
+
   res.statusCode = 200;
   res.end(
     JSON.stringify({

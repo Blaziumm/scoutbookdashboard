@@ -9,6 +9,7 @@ To Do:
 -Circular Progress bar next to all the merit badges and stuff to see how much is done
 -Maybe some sort of system of “What’s Left” for next rank with merit badge requirements you need for eagle for instance and rank requirements
 -Fix Vercel Deployments 😭
+-Use Browserless for Vercel deploys
 -Make login faster
 -Better Login Screen
 ✅Login System

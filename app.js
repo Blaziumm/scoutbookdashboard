@@ -13,7 +13,7 @@ async function loadData() {
 
 function summarizeRanks(programs) {
   let totalRanks = 0;
-  let awarded = 0;
+  let awarded = 1;
   programs.forEach((program) => {
     program.ranks.forEach((rank) => {
       totalRanks += 1;

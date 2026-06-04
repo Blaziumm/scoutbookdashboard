@@ -2,7 +2,7 @@
   "name": "advancements-automation",
   "version": "0.1.0",
   "private": true,
-  "description": "Local Playwright automation for advancements.scouting.org",
+  "description": "Playwright automation for advancements.scouting.org with Browserless support",
   "main": "scripts/run.js",
   "scripts": {
     "login": "node scripts/login.js",

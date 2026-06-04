@@ -7,6 +7,8 @@ module.exports = async (req, res) => {
     return;
   }
 
+  await cache.ensureLoaded();
+
   const session = cache.getSession();
   if (!session) {
     res.statusCode = 401;

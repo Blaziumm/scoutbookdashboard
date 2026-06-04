@@ -22,4 +22,5 @@ Quick usage
    - Take the returned session JSON and POST /advancements with { "session": <session> } using the same auth.
 
 Vercel integration
-- On Vercel, call the worker endpoints from your serverless function (or client) to obtain data instead of running Playwright there.
+- On Vercel, set `BROWSERLESS_WS_ENDPOINT` or `BROWSERLESS_TOKEN` and the API routes can run the Playwright scripts directly.
+- If you still run a separate worker, it can use the same Browserless configuration.

@@ -1,7 +1,33 @@
 const { chromium } = require("playwright");
 const fs = require("fs");
 
+function getBrowserlessEndpoint() {
+  const explicitEndpoint =
+    process.env.BROWSERLESS_WS_ENDPOINT ||
+    process.env.BROWSERLESS_ENDPOINT ||
+    process.env.BROWSERLESS_URL;
+
+  if (explicitEndpoint) {
+    return explicitEndpoint;
+  }
+
+  const token = process.env.BROWSERLESS_TOKEN;
+  if (!token) {
+    return null;
+  }
+
+  const host = process.env.BROWSERLESS_HOST || "chrome.browserless.io";
+  const endpoint = new URL(`wss://${host}`);
+  endpoint.searchParams.set("token", token);
+  return endpoint.toString();
+}
+
 async function launchBrowser() {
+  const browserlessEndpoint = getBrowserlessEndpoint();
+  if (browserlessEndpoint) {
+    return chromium.connectOverCDP(browserlessEndpoint);
+  }
+
   return chromium.launch({ headless: false });
 }
 
