@@ -3,7 +3,8 @@ const fs = require("fs");
 const path = require("path");
 const { execFile } = require("child_process");
 
-const publicDir = __dirname;
+const rootDir = __dirname;
+const staticDir = path.join(__dirname, "public");
 const port = process.env.PORT || 3000;
 let sessionState = null;
 let advancementsCache = null;
@@ -34,6 +35,21 @@ function serveFile(filePath, res) {
     res.writeHead(200, { "Content-Type": contentType });
     res.end(data);
   });
+}
+
+function serveStatic(requestPath, res) {
+  const safePath = decodeURIComponent(requestPath).replace(/^\/+/, "");
+  const candidates = [path.join(staticDir, safePath), path.join(rootDir, safePath)];
+
+  for (const filePath of candidates) {
+    if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+      serveFile(filePath, res);
+      return;
+    }
+  }
+
+  res.writeHead(404, { "Content-Type": "text/plain" });
+  res.end("Not found");
 }
 
 function runAdvancementsJob(callback) {
@@ -238,12 +254,12 @@ const server = http.createServer((req, res) => {
   }
 
   if (req.url === "/login") {
-    serveFile(path.join(publicDir, "login.html"), res);
+    serveFile(path.join(rootDir, "login.html"), res);
     return;
   }
 
   if (req.url === "/loading") {
-    serveFile(path.join(publicDir, "loading.html"), res);
+    serveFile(path.join(rootDir, "loading.html"), res);
     return;
   }
 
@@ -254,8 +270,7 @@ const server = http.createServer((req, res) => {
   }
 
   const requestPath = req.url === "/" ? "/index.html" : req.url;
-  const filePath = path.join(publicDir, decodeURIComponent(requestPath));
-  serveFile(filePath, res);
+  serveStatic(requestPath, res);
 });
 
 server.listen(port, () => {

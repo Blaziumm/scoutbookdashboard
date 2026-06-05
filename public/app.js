@@ -124,15 +124,14 @@ function renderBadges(data) {
             ? "status is-started"
             : "status";
         const percent = Math.round((badge.percentCompleted || 0) * 100);
-        
-        // Determine progress indicator status and color
+
         let progressStatus = "zero";
         if (badge.status === "Awarded") {
           progressStatus = "awarded";
         } else if (badge.status === "Started" && percent > 0) {
           progressStatus = "started";
         }
-        
+
         return `
           <article class="badge-card" data-status="${badge.status}">
             <div class="progress-indicator progress-${progressStatus}" style="--progress: ${percent}%">
@@ -155,8 +154,7 @@ function renderBadges(data) {
         `;
       })
       .join("");
-    
-    // Trigger animation on newly added progress indicators
+
     setTimeout(() => {
       document.querySelectorAll(".progress-indicator").forEach((indicator) => {
         indicator.classList.add("animate");
