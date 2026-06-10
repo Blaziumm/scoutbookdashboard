@@ -2,21 +2,11 @@
   "version": 2,
   "functions": {
     "api/**/*.js": {
-      "maxDuration": 60
+      "maxDuration": 10
     }
   },
   "rewrites": [
-    {
-      "source": "/",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/login",
-      "destination": "/login.html"
-    },
-    {
-      "source": "/loading",
-      "destination": "/loading.html"
-    }
+    { "source": "/login", "destination": "/login.html" },
+    { "source": "/loading", "destination": "/loading.html" }
   ]
 }

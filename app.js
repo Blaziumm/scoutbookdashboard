@@ -1,14 +1,39 @@
 async function loadData() {
-  const response = await fetch("/api/advancements/data", { cache: "no-store" });
-  if (response.status === 401) {
+  const stored = sessionStorage.getItem("advData");
+  if (stored) {
+    try {
+      return JSON.parse(stored);
+    } catch {}
+  }
+
+  const token = sessionStorage.getItem("advToken");
+  const personId = sessionStorage.getItem("advPersonId");
+  if (!token || !personId) {
     window.location.replace("/login");
     return null;
   }
-  if (!response.ok) {
-    throw new Error("Unable to load /api/advancements");
+
+  const dataRes = await fetch(`/api/data?personId=${personId}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (dataRes.status === 401) {
+    window.location.replace("/login");
+    return null;
   }
-  const text = await response.text();
-  return JSON.parse(text);
+  if (!dataRes.ok) {
+    throw new Error("Unable to load data");
+  }
+
+  const data = await dataRes.json();
+  const eventsRaw = sessionStorage.getItem("advEvents");
+  let events = { monthLabel: null, timezone: null, events: [], subscriptions: [] };
+  if (eventsRaw) {
+    try { events = JSON.parse(eventsRaw); } catch {}
+  }
+
+  const fullData = { ...data, personId, events };
+  sessionStorage.setItem("advData", JSON.stringify(fullData));
+  return fullData;
 }
 
 function summarizeRanks(programs) {
@@ -233,9 +258,7 @@ function renderEvents(data) {
 async function init() {
   try {
     const data = await loadData();
-    if (!data) {
-      return;
-    }
+    if (!data) return;
     renderSummary(data);
     renderPrograms(data);
     renderEvents(data);
