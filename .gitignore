@@ -1,0 +1,5 @@
+.env
+node_modules/
+storage/
+debug-advancements.txt
+WORKER_README.md

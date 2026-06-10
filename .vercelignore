@@ -1,4 +1,6 @@
 storage/
+static/
 tools/
 debug-advancements.txt
 node_modules
+.env

@@ -3,8 +3,8 @@ const fs = require("fs");
 const path = require("path");
 const { execFile } = require("child_process");
 
-const rootDir = __dirname;
-const staticDir = path.join(__dirname, "public");
+const rootDir = path.join(__dirname, "..");
+const staticDir = path.join(rootDir, "static");
 const port = process.env.PORT || 3000;
 let sessionState = null;
 let advancementsCache = null;
@@ -40,14 +40,22 @@ function serveFile(filePath, res) {
 function serveStatic(requestPath, res) {
   const safePath = decodeURIComponent(requestPath).replace(/^\/+/, "");
   const candidates = [path.join(staticDir, safePath), path.join(rootDir, safePath)];
+  
+  // Debug logging
+  console.log(`Serving static request: ${requestPath}`);
+  console.log(`Static dir: ${staticDir}`);
+  console.log(`Root dir: ${rootDir}`);
+  console.log(`Candidates: ${candidates[0]} and ${candidates[1]}`);
 
   for (const filePath of candidates) {
     if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+      console.log(`Serving file: ${filePath}`);
       serveFile(filePath, res);
       return;
     }
   }
 
+  console.log(`File not found for: ${requestPath}`);
   res.writeHead(404, { "Content-Type": "text/plain" });
   res.end("Not found");
 }

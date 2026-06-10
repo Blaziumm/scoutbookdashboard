@@ -1,0 +1,11 @@
+
+> advancements-automation@0.1.0 dev
+> node tools/server.js
+
+Server running at http://localhost:3000
+Serving static request: /health
+Static dir: /mnt/c/Users/ResonanceFTC/Downloads/New folder/static
+Root dir: /mnt/c/Users/ResonanceFTC/Downloads/New folder
+Candidates: /mnt/c/Users/ResonanceFTC/Downloads/New folder/static/health and /mnt/c/Users/ResonanceFTC/Downloads/New folder/health
+File not found for: /health
+Killed
