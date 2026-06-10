@@ -1,0 +1,13 @@
+  % Total    % Received % Xferd  Average Speed  Time    Time    Time   Current
+                                 Dload  Upload  Total   Spent   Left   Speed
+  0      0   0      0   0      0      0      0                              0100    186 100    149 100     37  16197   4022                              0100    186 100    149 100     37  16160   4013                              0100    186 100    149 100     37  16136   4006                              0
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot POST /api/login</pre>
+</body>
+</html>

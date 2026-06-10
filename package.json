@@ -10,7 +10,8 @@
     "read:events": "node scripts/run.js read:events",
     "read:profile": "node scripts/run.js read:profile",
     "probe": "node scripts/probe.js",
-    "dev": "node tools/server.js"
+    "dev": "node tools/server.js",
+    "build": "echo 'Static site - no build required'"
   },
   "dependencies": {
     "dotenv": "^16.4.5",

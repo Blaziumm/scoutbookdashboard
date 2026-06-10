@@ -3,6 +3,12 @@ const fs = require("fs");
 const path = require("path");
 const { execFile } = require("child_process");
 
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  // Optionally, you can exit the process here if you want to crash
+  // process.exit(1);
+});
+
 const rootDir = path.join(__dirname, "..");
 const staticDir = path.join(rootDir, "static");
 const port = process.env.PORT || 3000;
@@ -211,6 +217,7 @@ function runLogin(res, body) {
 }
 
 const server = http.createServer((req, res) => {
+  console.log(`Request: ${req.method} ${req.url}`);
   if (req.url === "/api/advancements/start") {
     if (!sessionState) {
       res.writeHead(401, { "Content-Type": "application/json" });
@@ -279,6 +286,13 @@ const server = http.createServer((req, res) => {
 
   const requestPath = req.url === "/" ? "/index.html" : req.url;
   serveStatic(requestPath, res);
+});
+
+server.on('error', (err) => {
+  console.error('Server error:', err);
+});
+server.on('close', () => {
+  console.log('Server closed');
 });
 
 server.listen(port, () => {
